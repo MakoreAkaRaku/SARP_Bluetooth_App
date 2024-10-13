@@ -11,25 +11,77 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
-        <Button
-            android:id="@+id/button_first"
+        <EditText
+            android:id="@+id/SSIDText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/next"
-            app:layout_constraintBottom_toTopOf="@id/textview_first"
+            android:ems="10"
+            android:inputType="text"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.414"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.049" />
 
-        <TextView
-            android:id="@+id/textview_first"
+        <EditText
+            android:id="@+id/PassWordText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/lorem_ipsum"
+            android:ems="10"
+            android:inputType="textPassword"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/SSIDText"
+            app:layout_constraintVertical_bias="0.112" />
+
+        <Button
+            android:id="@+id/SendMessage"
+            android:layout_width="107dp"
+            android:layout_height="56dp"
+            android:text="Send Message"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_first" />
+            app:layout_constraintTop_toBottomOf="@+id/PassWordText"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="50dp"
+            android:layout_height="27dp"
+            android:ems="16"
+            android:text="SSID"
+            app:layout_constraintBottom_toBottomOf="@+id/SSIDText"
+            app:layout_constraintEnd_toStartOf="@+id/SSIDText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/SSIDText" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="81dp"
+            android:layout_height="30dp"
+            android:text="Password"
+            android:ems="16"
+            app:layout_constraintBottom_toBottomOf="@+id/PassWordText"
+            app:layout_constraintEnd_toStartOf="@+id/PassWordText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/PassWordText" />
+
+        <Button
+            android:id="@+id/SaveButton"
+            android:layout_width="52dp"
+            android:layout_height="44dp"
+            android:background="@drawable/roundedbutton"
+            android:text="+"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/PassWordText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/SSIDText"
+            app:layout_constraintTop_toTopOf="@+id/SSIDText" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
