@@ -1,12 +1,10 @@
 package com.example.sarpapp
 
-import android.bluetooth.BluetoothAdapter
+import android.app.Dialog
 import android.bluetooth.BluetoothManager
 import android.os.Bundle
 import com.google.android.material.snackbar.Snackbar
-import android.bluetooth.le.*
-import android.content.Context
-import android.os.Build
+import android.content.DialogInterface
 import android.os.Build.VERSION_CODES.JELLY_BEAN_MR1
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -15,10 +13,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.getSystemService
 import com.example.sarpapp.databinding.ActivityMainBinding
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
+    private final val BT_REQUEST_CODE = 1
     private lateinit var bluetoothHandler: BluetoothHandler
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -38,8 +40,17 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
-
-        bluetoothHandler = BluetoothHandler(this)
+        if (!hasBTPermissions()) {
+            showExplanation(
+                "Bluetooth Permission",
+                "To use this app, you need to allow bluetooth for Scan and Advertise",
+                *BLUETOOTH_PERMISSIONS,
+                permissionRequestCode = BT_REQUEST_CODE
+            )
+            if (!hasBTPermissions())
+                return
+        }
+        bluetoothHandler = BluetoothHandler(this.getSystemService<BluetoothManager>()!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -62,5 +73,30 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+
+    private fun showExplanation(
+        title: String,
+        message: String,
+        vararg permissions: String,
+        permissionRequestCode: Int
+    ) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(
+                android.R.string.ok,
+                DialogInterface.OnClickListener { _, id ->
+                    requestPermissions(
+                        permissions,
+                        permissionRequestCode
+                    )
+                })
+            .setNegativeButton(android.R.string.cancel,
+                DialogInterface.OnClickListener {
+                        _, id->exitProcess(0)
+                })
+        builder.create().show()
     }
 }

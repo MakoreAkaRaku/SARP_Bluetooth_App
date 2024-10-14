@@ -31,8 +31,12 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding.sendMessage.setOnClickListener {
+        binding.saveConfigBtn.setOnClickListener{
+            var ssidText: String = binding.ssidText.text.toString()
+            var pwdText: String = binding.passwordText.text.toString()
+            //TODO: save it on disk or somewhere please
+        }
+        binding.sendMsgBtn.setOnClickListener {
             findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
