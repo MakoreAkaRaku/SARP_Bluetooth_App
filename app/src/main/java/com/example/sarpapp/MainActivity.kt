@@ -1,22 +1,20 @@
 package com.example.sarpapp
 
-import android.app.Dialog
 import android.bluetooth.BluetoothManager
-import android.os.Bundle
-import com.google.android.material.snackbar.Snackbar
 import android.content.DialogInterface
-import android.os.Build.VERSION_CODES.JELLY_BEAN_MR1
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.getSystemService
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import android.view.Menu
-import android.view.MenuItem
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
-import androidx.core.content.getSystemService
 import com.example.sarpapp.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +38,11 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
+        val bluetoothLEAvailable = packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
+        if (!bluetoothLEAvailable)
+            showExplanation("Get the fuck out", "Your device is stupid and doesn't even have bluetooth, for fuck sake",
+                *BLUETOOTH_PERMISSIONS,
+                permissionRequestCode = BT_REQUEST_CODE)
         if (!hasBTPermissions()) {
             showExplanation(
                 "Bluetooth Permission",
@@ -47,10 +50,7 @@ class MainActivity : AppCompatActivity() {
                 *BLUETOOTH_PERMISSIONS,
                 permissionRequestCode = BT_REQUEST_CODE
             )
-            if (!hasBTPermissions())
-                return
         }
-        bluetoothHandler = BluetoothHandler(this.getSystemService<BluetoothManager>()!!)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -98,5 +98,19 @@ class MainActivity : AppCompatActivity() {
                         _, id->exitProcess(0)
                 })
         builder.create().show()
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
+        if (requestCode == BT_REQUEST_CODE)
+        {
+            val permissionsGranted = grantResults.all{
+            it == PackageManager.PERMISSION_GRANTED
+            }
+            if (permissionsGranted)
+                bluetoothHandler = BluetoothHandler(getSystemService<BluetoothManager>()!!)
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 }

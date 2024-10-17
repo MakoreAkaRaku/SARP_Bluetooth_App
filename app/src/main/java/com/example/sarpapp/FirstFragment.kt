@@ -23,7 +23,6 @@ class FirstFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         _binding = FragmentFirstBinding.inflate(inflater, container, false)
         return binding.root
 
@@ -37,7 +36,8 @@ class FirstFragment : Fragment() {
             //TODO: save it on disk or somewhere please
         }
         binding.sendMsgBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            //ActivityResultContract
+            this.findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
         }
     }
 
