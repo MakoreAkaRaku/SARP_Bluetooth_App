@@ -1,15 +1,13 @@
 package com.example.sarpapp.ui.components
 
+import android.annotation.SuppressLint
+import android.bluetooth.BluetoothManager
+import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.ColorSpace.Rgb
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -21,13 +19,9 @@ import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldColors
-import androidx.compose.material.TextFieldDefaults.indicatorLine
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,7 +31,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -48,19 +41,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
+import com.example.sarpapp.BluetoothHandler
 
+@SuppressLint("MissingPermission")
 @Composable
 @Preview
 fun WifiBroadcastForm() {
-    val context = LocalContext.current
-    val hasBLECapabilities by produceState(false) {
-        value = context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)
-    }
-//    if (!hasBLECapabilities) {
-//        NoBLEWarningScreen()
-//        return
-//    }
-
     var ssidVal by rememberSaveable { mutableStateOf("") }
     var pwdVal by rememberSaveable { mutableStateOf("") }
     var pwdVisible by rememberSaveable { mutableStateOf(false) }

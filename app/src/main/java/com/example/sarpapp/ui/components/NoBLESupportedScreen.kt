@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.em
 
 @Composable
 @Preview
-fun NoBLEWarningScreen() {
+fun NoBLESupportedScreen() {
     val description = "Your device does not support \'BLE\' technology"
     val mainActivity = (LocalContext.current as? Activity)
     Column(
