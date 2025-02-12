@@ -44,6 +44,7 @@ fun LeScannerView(btHandler: BluetoothHandler) {
                     context,
                     "Scan Started!",
                     Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -69,8 +70,11 @@ fun LeScannerView(btHandler: BluetoothHandler) {
                     if (switchVal) {
                         permissionLauncher.launch(BLUETOOTH_PERMISSIONS)
                     }
-                    else
+                    else {
+                        btHandler.stopScan()
                         scannedDevicesViewModel.clear()
+
+                    }
                 }
             )
         }
