@@ -42,7 +42,13 @@ fun DevicesListView(deviceList: LeScanResultList) {
                     .padding(
                         vertical = 0.dp
                     )
-                    .clickable { Toast.makeText(context,"MAC Address: ${it.device.address}",Toast.LENGTH_LONG).show()}
+                    .clickable {
+                        Toast.makeText(
+                            context,
+                            "MAC Address: ${it.device.address}",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
             )
         }
     }
