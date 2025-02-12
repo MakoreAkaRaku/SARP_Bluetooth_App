@@ -19,7 +19,15 @@ class BluetoothHandler(
 
     private var isScanning = false
     private var isAdvertising = false
-    private val BROADCAST_TIME: Long = 5000
+    companion object DataAdvertiseFields {
+        const val SSID_MAX_LENGTH: Int = 8
+        const val PWD_MAX_LENGTH: Int = 16
+        /**
+         * Standard time by default to broadcast messages or scan devices. Unit is in ms
+         */
+        const val STANDARDTIME: Long = 5000
+    }
+
     private val handler: Handler = Handler(Looper.getMainLooper())
 
     @SuppressLint("MissingPermission")
@@ -47,7 +55,7 @@ class BluetoothHandler(
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
-    fun startScan(timeToScanMs: Long = BROADCAST_TIME): Boolean {
+    fun startScan(timeToScanMs: Long = STANDARDTIME): Boolean {
         if (isScanning) return false
         isScanning = true
         leDeviceList.clear()
@@ -77,7 +85,7 @@ class BluetoothHandler(
                 isAdvertising = false
                 bluetoothAdapter.bluetoothLeAdvertiser.stopAdvertising(leAdvertiserCallback)
             },
-            BROADCAST_TIME
+            STANDARDTIME
         )
         bluetoothAdapter.bluetoothLeAdvertiser.startAdvertising(
             advertiseSettings.build(),
@@ -86,4 +94,5 @@ class BluetoothHandler(
         )
         return true
     }
+
 }
