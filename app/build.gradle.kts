@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.sarpapp"
-        minSdk = 24
+        minSdk = 23
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -42,7 +42,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -57,6 +56,7 @@ dependencies {
     implementation(composeBom)
     androidTestImplementation(composeBom)
 
+    implementation("androidx.compose.animation:animation:1.7.7")
     // Choose one of the following:
     // Material Design 3
     implementation("androidx.compose.material3:material3")

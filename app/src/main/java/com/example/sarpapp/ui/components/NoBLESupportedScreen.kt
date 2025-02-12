@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.runtime.Composable
@@ -37,7 +37,7 @@ fun NoBLESupportedScreen() {
     ) {
         Icon(imageVector  = Icons.Filled.Error, contentDescription = "BLE permission warning", tint = Color.Red, modifier = Modifier.size(100.dp))
         Spacer(Modifier.size(16.dp))
-        Text(fontSize = 5.em,text = description,color=Color.White, textAlign = TextAlign.Center)
+        Text(fontSize = 5.em,text = description,textAlign = TextAlign.Center)
         Spacer(Modifier.size(16.dp))
         Button(onClick = {
             mainActivity?.finish()

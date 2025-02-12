@@ -16,6 +16,9 @@ fun AppCompatActivity.hasPermissions(vararg permissions: String): Boolean {
     return permissions.all { hasPermission(it) }
 }
 
+/**
+ * List of permissions needed to use this application
+ */
 val BLUETOOTH_PERMISSIONS = buildList<String> {
     addAll(
         listOf(
@@ -25,12 +28,13 @@ val BLUETOOTH_PERMISSIONS = buildList<String> {
             Manifest.permission.BLUETOOTH_ADMIN
         )
     )
-
+    //From Android 12 we must take care of these flags, else it doesn't matter
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         addAll(
             listOf(
                 Manifest.permission.BLUETOOTH_SCAN,
-                Manifest.permission.BLUETOOTH_ADVERTISE
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_CONNECT
             )
         )
     }
