@@ -32,7 +32,7 @@ fun LeScannerView(btHandler: BluetoothHandler) {
             for (result in results) {
                 if (!result.value) {
                     switchVal = false
-                    break
+                    return@rememberLauncherForActivityResult
                 }
             }
             btHandler.startScan(1000)
