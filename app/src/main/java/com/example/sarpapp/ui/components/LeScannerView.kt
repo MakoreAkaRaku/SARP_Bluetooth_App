@@ -1,6 +1,7 @@
 package com.example.sarpapp.ui.components
 
 import android.annotation.SuppressLint
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +18,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
@@ -25,6 +27,7 @@ import com.example.sarpapp.BluetoothHandler
 @SuppressLint("MissingPermission")
 @Composable
 fun LeScannerView(btHandler: BluetoothHandler) {
+    val context = LocalContext.current
     val scannedDevicesViewModel = btHandler.getDeviceListViewModel()
     var switchVal by rememberSaveable { mutableStateOf(false) }
     val permissionLauncher =
@@ -35,7 +38,13 @@ fun LeScannerView(btHandler: BluetoothHandler) {
                     return@rememberLauncherForActivityResult
                 }
             }
-            btHandler.startScan(1000)
+            if (btHandler.startScan())
+            {
+                Toast.makeText(
+                    context,
+                    "Scan Started!",
+                    Toast.LENGTH_SHORT)
+            }
         }
 
     Column(
