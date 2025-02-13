@@ -76,15 +76,10 @@ class BluetoothBLEViewModel(
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
 
             if (callbackType == ScanSettings.CALLBACK_TYPE_ALL_MATCHES && result != null) {
-                val device =
-                    if (result.device.name == null) ScannedDevice(
-                        macAddress = result.device.address,
-                        rssi = result.rssi
-                    )
-                    else ScannedDevice(
-                        name = result.device.name,
-                        macAddress = result.device.address,
-                        rssi = result.rssi
+                val device =ScannedDevice(
+                    result.device.name,
+                    address = result.device.address,
+                    rssi = result.rssi
                     )
                 scanResults.add(device)
             }
