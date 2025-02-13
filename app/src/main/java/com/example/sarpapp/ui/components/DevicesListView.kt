@@ -1,7 +1,6 @@
 package com.example.sarpapp.ui.components
 
 import android.annotation.SuppressLint
-import android.bluetooth.le.ScanResult
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items

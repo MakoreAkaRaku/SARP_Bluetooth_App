@@ -26,6 +26,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.Locale
 
 class BluetoothBLEViewModel(
     application: Application
@@ -72,16 +73,27 @@ class BluetoothBLEViewModel(
      * Object containing functions to be called when Scanning receives a result.
      */
     private val scanCallback = object : ScanCallback() {
-        @SuppressLint("MissingPermission")
+        @SuppressLint("MissingPermission", "NewApi")
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
 
             if (callbackType == ScanSettings.CALLBACK_TYPE_ALL_MATCHES && result != null) {
-                val device =ScannedDevice(
+                val device = ScannedDevice(
                     name = result.device.name ?: "N/A",
                     macAddress = result.device.address,
-                    rssi = result.rssi
-                    )
-                scanResults.add(device)
+                    rssi = result.rssi,
+                    scannedAt = result.timestampNanos
+                )
+
+                val temp = scanResults + listOf(device)
+
+                scanResults.clear()
+                scanResults.addAll(
+                    temp
+                        .sortedByDescending { it.scannedAt }
+                        .distinctBy { it.macAddress }
+                        .sortedBy { it.rssi }
+                )
+
             }
         }
     }
