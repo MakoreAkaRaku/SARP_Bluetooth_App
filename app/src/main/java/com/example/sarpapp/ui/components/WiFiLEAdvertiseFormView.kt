@@ -1,9 +1,9 @@
 package com.example.sarpapp.ui.components
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,7 +27,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -35,23 +35,28 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
-import com.example.sarpapp.BluetoothHandler
+import com.example.sarpapp.data.ble.BluetoothBLEViewModel
+import java.util.logging.Handler
 
 @SuppressLint("MissingPermission")
 @Composable
-fun WiFiLEAdvertiseFormView(btHandler: BluetoothHandler) {
-    var context = LocalContext.current
+fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
     var ssidVal by rememberSaveable { mutableStateOf("") }
     var pwdVal by rememberSaveable { mutableStateOf("") }
     var pwdVisible by rememberSaveable { mutableStateOf(false) }
+    val isAdvertising = btHandler.isAdvertising
+
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
             for (perm in it) {
                 if (!perm.value)
                     return@rememberLauncherForActivityResult
             }
-            btHandler.broadcastMsg(ssidVal, pwdVal)
+            btHandler.broadcastForm(ssidVal, pwdVal)
         }
+
+    val ssidOK = ssidVal.length <= BluetoothBLEViewModel.SSID_MAX_LENGTH
+    val passOK = pwdVal.length <= BluetoothBLEViewModel.PWD_MAX_LENGTH
 
     Column(
         modifier = Modifier
@@ -64,35 +69,36 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothHandler) {
             label = { Text("SSID", textAlign = TextAlign.Center) },
             placeholder = { Text("Enter the WiFi SSID") },
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
+            isError =!ssidOK,
             maxLines = 1,
             singleLine = true,
             onValueChange = {
-                if (it.length > BluetoothHandler.SSID_MAX_LENGTH) {
-                    Toast.makeText(
-                        context,
-                        "SSID too long, only up to ${BluetoothHandler.SSID_MAX_LENGTH} characters!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@OutlinedTextField
-                }
                 ssidVal = it
             },
             modifier = Modifier.padding(20.dp),
-            shape = RoundedCornerShape(40.dp)
+            shape = RoundedCornerShape(40.dp),
+            supportingText = {
+                AnimatedVisibility(!ssidOK) {
+                    Text(
+                        color = MaterialTheme.colorScheme.error,
+                        text="The SSID has to be 8 chars long at most")
+                }
+
+            }
         )
 
         OutlinedTextField(
             value = pwdVal,
+            isError = !passOK,
             onValueChange = {
-                if (it.length > BluetoothHandler.PWD_MAX_LENGTH) {
-                    Toast.makeText(
-                        context,
-                        "Password too long, only up to ${BluetoothHandler.PWD_MAX_LENGTH} characters!",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@OutlinedTextField
-                }
                 pwdVal = it
+            },
+            supportingText = {
+                AnimatedVisibility(!passOK) {
+                    Text(
+                        text = "The password is too long",
+                        color = MaterialTheme.colorScheme.error)
+                }
             },
             label = { Text("PASSWORD", textAlign = TextAlign.Center) },
             placeholder = { Text("Enter WiFi password") },
@@ -118,6 +124,7 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothHandler) {
                     BLUETOOTH_PERMISSIONS
                 )
             },
+            enabled = ssidOK && passOK && !isAdvertising,
             shape = RoundedCornerShape(10.dp),
             modifier = Modifier.size(200.dp, 50.dp)
         ) {

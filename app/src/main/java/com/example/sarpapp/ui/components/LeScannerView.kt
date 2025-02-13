@@ -22,14 +22,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
-import com.example.sarpapp.BluetoothHandler
+import com.example.sarpapp.data.ble.BluetoothBLEViewModel
 
 @SuppressLint("MissingPermission")
 @Composable
-fun LeScannerView(btHandler: BluetoothHandler) {
+fun LeScannerView(btViewModel: BluetoothBLEViewModel) {
     val context = LocalContext.current
-    val scannedDevicesViewModel = btHandler.getDeviceListViewModel()
     var switchVal by rememberSaveable { mutableStateOf(false) }
+    val hasCooledDown = btViewModel.scanHasCooledDown
     val permissionLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { results: Map<String, Boolean> ->
             for (result in results) {
@@ -38,14 +38,11 @@ fun LeScannerView(btHandler: BluetoothHandler) {
                     return@rememberLauncherForActivityResult
                 }
             }
-            if (btHandler.startScan())
-            {
-                Toast.makeText(
-                    context,
-                    "Scan Started!",
-                    Toast.LENGTH_SHORT)
-                    .show()
-            }
+            btViewModel.scanResults.clear()
+            btViewModel.startScan()
+            Toast.makeText(
+                context, "Scan Started!", Toast.LENGTH_SHORT
+            ).show()
         }
 
     Column(
@@ -57,27 +54,19 @@ fun LeScannerView(btHandler: BluetoothHandler) {
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Absolute.SpaceBetween
-        )
-        {
+        ) {
             Text(
-                "Enable scanning",
-                fontSize = 5.em
+                "Enable scanning", fontSize = 5.em
             )
-            Switch(
-                switchVal,
-                onCheckedChange = {
-                    switchVal = it
-                    if (switchVal) {
-                        permissionLauncher.launch(BLUETOOTH_PERMISSIONS)
-                    }
-                    else {
-                        btHandler.stopScan()
-                        scannedDevicesViewModel.clear()
-
-                    }
-                }
+            Switch(switchVal, onCheckedChange = {
+                switchVal = it
+                if (switchVal) {
+                    permissionLauncher.launch(BLUETOOTH_PERMISSIONS)
+                } else btViewModel.stopScan()
+            },
+                enabled = hasCooledDown
             )
         }
-        DevicesListView(scannedDevicesViewModel)
+        DevicesListView(btViewModel.scanResults)
     }
 }
