@@ -77,8 +77,8 @@ class BluetoothBLEViewModel(
 
             if (callbackType == ScanSettings.CALLBACK_TYPE_ALL_MATCHES && result != null) {
                 val device =ScannedDevice(
-                    result.device.name,
-                    address = result.device.address,
+                    name = result.device.name ?: "N/A",
+                    macAddress = result.device.address,
                     rssi = result.rssi
                     )
                 scanResults.add(device)
