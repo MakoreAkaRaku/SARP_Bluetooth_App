@@ -26,7 +26,6 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.Locale
 
 class BluetoothBLEViewModel(
     application: Application
@@ -56,7 +55,10 @@ class BluetoothBLEViewModel(
 
     companion object DataConstants {
         //TODO: Short UUID must be defined by the whole system service.
-        const val SHORT_UUID: Int = 0xDEAD
+        const val WIFI_SHORT_UUID: Int = 0xDEAD
+        const val TOKEN_SHORT_UUID: Int = 0xFADE
+        const val TOKEN_MSG_LENGTH: Int = 36
+        const val MESSAGE_MAX_LENGTH = 62
         const val SSID_MAX_LENGTH: Int = 8
         const val PWD_MAX_LENGTH: Int = 8
 
@@ -130,16 +132,38 @@ class BluetoothBLEViewModel(
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_ADVERTISE)
-    fun broadcastForm(ssid: String, pwd: String, duration: Long = BROADCAST_TIME): Boolean {
-
-        var msg = (ssid + pwd).toByteArray(Charsets.UTF_8)
+    fun broadcastMessage(
+        message: String,
+        manufacturerId: Int,
+        duration: Long = BROADCAST_TIME
+    ): Boolean {
+        if(message.length > MESSAGE_MAX_LENGTH){
+            Log.e(
+                this::class.java.simpleName,
+                "Couldn't broadcast message. Message is too long."
+            )
+            return false
+        }
         //TODO: must encrypt the message before broadcasting
+        var advByteArr = message.substring(0, message.length / 2).toByteArray(Charsets.UTF_8)
+        var scanResponseByteArr =
+            message.substring(message.length / 2, message.length).toByteArray(Charsets.UTF_8)
 
-        Log.i(this::class.java.simpleName, "Message is 0x${msg.toHexString(HexFormat.UpperCase)}")
+        Log.i(
+            this::class.java.simpleName,
+            "Adv message is 0x${advByteArr.toHexString(HexFormat.UpperCase)}" +
+                    "\n Scan message is 0X${scanResponseByteArr.toHexString(HexFormat.UpperCase)}"
+        )
 
         val data = AdvertiseData
             .Builder()
-            .addManufacturerData(SHORT_UUID, msg)
+            .addManufacturerData(manufacturerId, advByteArr)
+            .setIncludeDeviceName(false)
+            .build()
+
+        val scanResponseData = AdvertiseData
+            .Builder()
+            .addManufacturerData(manufacturerId, scanResponseByteArr)
             .setIncludeDeviceName(false)
             .build()
 
@@ -153,6 +177,7 @@ class BluetoothBLEViewModel(
         leAdvertiser.startAdvertising(
             settings,
             data,
+            scanResponseData,
             advertiseCallback
         )
         viewModelScope.launch {

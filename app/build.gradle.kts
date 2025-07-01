@@ -1,6 +1,9 @@
+import java.net.URL
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("org.openapi.generator") version "7.6.0" // adjust to latest
 }
 
 android {
@@ -93,4 +96,55 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata")
     // Optional - Integration with RxJava
     implementation("androidx.compose.runtime:runtime-rxjava2")
+    // for http requests
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    //for http interface
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    //for json converter
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    //loggin interceptor
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+}
+
+
+tasks.register<DefaultTask>("downloadOpenApiSpec") {
+    doLast {
+        val openApiURL = "https://sarp01.westeurope.cloudapp.azure.com/swagger/json"
+
+        val url = URL(openApiURL)
+        val file = File("$rootDir/specs/openapi.yaml")
+        file.parentFile.mkdirs()
+        file.writeText(url.readText())
+    }
+}
+
+tasks.named("openApiGenerate") {
+    dependsOn("downloadOpenApiSpec")
+}
+
+tasks.named("assemble") {
+    dependsOn("openApiGenerate")
+}
+
+
+openApiGenerate {
+    generatorName.set("kotlin")
+    skipValidateSpec.set(true)
+
+    inputSpec.set("$rootDir/specs/openapi.json") // You'll copy the file locally
+    outputDir.set("$buildDir/generated/openapi")
+
+
+    apiPackage.set("com.example.sarpapp.data.api")
+    modelPackage.set("com.example.sarpapp.data.model")
+    invokerPackage.set("com.example.sarpapp.data.invoker")
+
+    configOptions.set(
+        mapOf(
+            "library" to "jvm-ktor",              // ← use Ktor-based client
+            "dateLibrary" to "java8",         // or "string", "java8", etc.
+            "serializationLibrary" to "kotlinx_serialization",
+            "useCoroutines" to "true"
+        )
+    )
 }
