@@ -1,6 +1,11 @@
-package com.example.sarpapp.data.api
+package com.example.sarpapp.viewmodel.api
 
 import androidx.lifecycle.ViewModel
+import com.example.sarpapp.data.api.ApiService
+import com.example.sarpapp.data.api.ApiTokenEntity
+import com.example.sarpapp.data.api.CredentialsResponse
+import com.example.sarpapp.data.api.NetworkModule
+import com.example.sarpapp.data.api.UserCredentialsEntity
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

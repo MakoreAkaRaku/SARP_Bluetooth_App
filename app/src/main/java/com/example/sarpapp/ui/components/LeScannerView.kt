@@ -22,7 +22,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
-import com.example.sarpapp.data.ble.BluetoothBLEViewModel
+import com.example.sarpapp.viewmodel.ble.BluetoothBLEViewModel
 
 @SuppressLint("MissingPermission")
 @Composable

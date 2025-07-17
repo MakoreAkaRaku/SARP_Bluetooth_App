@@ -3,7 +3,7 @@ package com.example.sarpapp.ui.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
-import com.example.sarpapp.data.api.TokenViewModel
+import com.example.sarpapp.viewmodel.api.TokenViewModel
 
 @Composable
 fun LoginScreen(navController: NavController, tokenViewModel: TokenViewModel) {

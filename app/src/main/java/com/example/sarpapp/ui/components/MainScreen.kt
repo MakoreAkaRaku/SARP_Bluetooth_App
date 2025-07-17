@@ -10,8 +10,8 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.sarpapp.data.api.TokenViewModel
-import com.example.sarpapp.data.ble.BluetoothBLEViewModel
+import com.example.sarpapp.viewmodel.api.TokenViewModel
+import com.example.sarpapp.viewmodel.ble.BluetoothBLEViewModel
 
 @Composable
 fun MainScreen(tokenViewModel: TokenViewModel, btHandler: BluetoothBLEViewModel = viewModel()) {

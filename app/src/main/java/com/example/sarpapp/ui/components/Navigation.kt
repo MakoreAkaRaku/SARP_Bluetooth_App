@@ -6,7 +6,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.sarpapp.data.api.TokenViewModel
+import com.example.sarpapp.viewmodel.api.TokenViewModel
 
 
 @Composable

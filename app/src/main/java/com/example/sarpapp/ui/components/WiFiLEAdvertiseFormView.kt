@@ -35,7 +35,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
-import com.example.sarpapp.data.ble.BluetoothBLEViewModel
+import com.example.sarpapp.viewmodel.ble.BluetoothBLEViewModel
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -51,7 +51,7 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
                 if (!perm.value)
                     return@rememberLauncherForActivityResult
             }
-            btHandler.broadcastMessage(ssidVal+pwdVal,BluetoothBLEViewModel.WIFI_SHORT_UUID)
+            btHandler.broadcastMessage(ssidVal+pwdVal, BluetoothBLEViewModel.WIFI_SHORT_UUID)
         }
 
     val ssidOK = ssidVal.length <= BluetoothBLEViewModel.SSID_MAX_LENGTH

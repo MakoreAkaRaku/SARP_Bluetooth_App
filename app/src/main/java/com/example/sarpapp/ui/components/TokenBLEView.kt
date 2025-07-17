@@ -26,8 +26,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.sarpapp.BLUETOOTH_PERMISSIONS
-import com.example.sarpapp.data.api.TokenViewModel
-import com.example.sarpapp.data.ble.BluetoothBLEViewModel
+import com.example.sarpapp.viewmodel.api.TokenViewModel
+import com.example.sarpapp.viewmodel.ble.BluetoothBLEViewModel
 import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
@@ -45,7 +45,7 @@ fun TokenBLEView(tokenViewModel: TokenViewModel, btHandler: BluetoothBLEViewMode
                 if (!perm.value)
                     return@rememberLauncherForActivityResult
             }
-            btHandler.broadcastMessage(chosenToken.value,BluetoothBLEViewModel.TOKEN_SHORT_UUID)
+            btHandler.broadcastMessage(chosenToken.value, BluetoothBLEViewModel.TOKEN_SHORT_UUID)
         }
     Column(
         modifier = Modifier

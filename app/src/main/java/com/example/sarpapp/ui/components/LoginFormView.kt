@@ -33,7 +33,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.sarpapp.data.api.TokenViewModel
+import com.example.sarpapp.viewmodel.api.TokenViewModel
 import kotlinx.coroutines.launch
 
 @Composable

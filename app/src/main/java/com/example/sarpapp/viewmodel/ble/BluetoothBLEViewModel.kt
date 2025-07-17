@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalStdlibApi::class)
 
-package com.example.sarpapp.data.ble
+package com.example.sarpapp.viewmodel.ble
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sarpapp.data.ble.ScannedDevice
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
