@@ -44,7 +44,7 @@ fun LoginFormView(navController: NavController,tokenViewModel: TokenViewModel) {
     var pwdVisible by rememberSaveable { mutableStateOf(false) }
     val usernameOK = username.length <= 16 //TOFIX
     val pwdOK = pwd.length <= 16 //TOFIX
-
+    var loginErrorResp  by rememberSaveable{ mutableStateOf(false)}
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -56,7 +56,7 @@ fun LoginFormView(navController: NavController,tokenViewModel: TokenViewModel) {
             label = { Text("Username", textAlign = TextAlign.Center) },
             placeholder = { Text("Your SARP username") },
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
-            isError = !usernameOK,
+            isError = !usernameOK || loginErrorResp,
             maxLines = 1,
             singleLine = true,
             onValueChange = {
@@ -65,27 +65,42 @@ fun LoginFormView(navController: NavController,tokenViewModel: TokenViewModel) {
             modifier = Modifier.padding(20.dp),
             shape = RoundedCornerShape(40.dp),
             supportingText = {
-                AnimatedVisibility(!usernameOK) {
-                    Text(
-                        color = MaterialTheme.colorScheme.error,
-                        text = "Wrong Username"
-                    )
+                AnimatedVisibility(!usernameOK || loginErrorResp) {
+                    if (!usernameOK) {
+                        Text(
+                            color = MaterialTheme.colorScheme.error,
+                            text = "The Username is too long"
+                        )
+                    } else {
+                        Text(
+                            color = MaterialTheme.colorScheme.error,
+                            text = "Wrong credentials"
+                        )
+                    }
                 }
 
             }
         )
         OutlinedTextField(
             value = pwd,
-            isError = !pwdOK,
+            isError = !pwdOK || loginErrorResp,
+
             onValueChange = {
                 pwd = it
             },
             supportingText = {
-                AnimatedVisibility(!pwdOK) {
-                    Text(
-                        text = "The password is too long",
-                        color = MaterialTheme.colorScheme.error
-                    )
+                AnimatedVisibility(!pwdOK || loginErrorResp) {
+                    if (!pwdOK) {
+                        Text(
+                            color = MaterialTheme.colorScheme.error,
+                            text = "The password too long"
+                        )
+                    } else {
+                        Text(
+                            color = MaterialTheme.colorScheme.error,
+                            text = "Wrong credentials"
+                        )
+                    }
                 }
             },
             label = { Text("Password", textAlign = TextAlign.Center) },
@@ -109,9 +124,13 @@ fun LoginFormView(navController: NavController,tokenViewModel: TokenViewModel) {
         Button(
             onClick = {
                 if (usernameOK && pwdOK) {
+                    loginErrorResp = false
                     corroutineScope.launch {
                         if (tokenViewModel.login(username, pwd)) {
                             navController.navigate("main_view")
+                        }
+                        else {
+                            loginErrorResp = true
                         }
                     }
                 }
