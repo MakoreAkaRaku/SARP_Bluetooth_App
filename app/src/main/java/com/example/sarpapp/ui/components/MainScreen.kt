@@ -20,9 +20,10 @@ fun MainScreen(tokenViewModel: TokenViewModel, btHandler: BluetoothBLEViewModel 
         state = pagerState,
         pagerSnapDistance = PagerSnapDistance.atMost(1)
     )
-    Column(modifier = Modifier.fillMaxSize()){
+    Column(modifier = Modifier.fillMaxSize()) {
 
-        HorizontalPager(state = pagerState,
+        HorizontalPager(
+            state = pagerState,
             modifier = Modifier.fillMaxSize(),
             pageSize = PageSize.Fill,
             beyondViewportPageCount = 1,

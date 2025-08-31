@@ -51,7 +51,7 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
                 if (!perm.value)
                     return@rememberLauncherForActivityResult
             }
-            btHandler.broadcastMessage(ssidVal+pwdVal, BluetoothBLEViewModel.WIFI_SHORT_UUID)
+            btHandler.broadcastMessage(ssidVal + pwdVal, BluetoothBLEViewModel.WIFI_SHORT_UUID)
         }
 
     val ssidOK = ssidVal.length <= BluetoothBLEViewModel.SSID_MAX_LENGTH
@@ -68,7 +68,7 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
             label = { Text("SSID", textAlign = TextAlign.Center) },
             placeholder = { Text("Enter the WiFi SSID") },
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
-            isError =!ssidOK,
+            isError = !ssidOK,
             maxLines = 1,
             singleLine = true,
             onValueChange = {
@@ -80,7 +80,8 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
                 AnimatedVisibility(!ssidOK) {
                     Text(
                         color = MaterialTheme.colorScheme.error,
-                        text="The SSID has to be 8 chars long at most")
+                        text = "The SSID has to be 8 chars long at most"
+                    )
                 }
 
             }
@@ -96,7 +97,8 @@ fun WiFiLEAdvertiseFormView(btHandler: BluetoothBLEViewModel) {
                 AnimatedVisibility(!passOK) {
                     Text(
                         text = "The password is too long",
-                        color = MaterialTheme.colorScheme.error)
+                        color = MaterialTheme.colorScheme.error
+                    )
                 }
             },
             label = { Text("PASSWORD", textAlign = TextAlign.Center) },

@@ -58,12 +58,13 @@ fun LeScannerView(btViewModel: BluetoothBLEViewModel) {
             Text(
                 "Enable scanning", fontSize = 5.em
             )
-            Switch(switchVal, onCheckedChange = {
-                switchVal = it
-                if (switchVal) {
-                    permissionLauncher.launch(BLUETOOTH_PERMISSIONS)
-                } else btViewModel.stopScan()
-            },
+            Switch(
+                switchVal, onCheckedChange = {
+                    switchVal = it
+                    if (switchVal) {
+                        permissionLauncher.launch(BLUETOOTH_PERMISSIONS)
+                    } else btViewModel.stopScan()
+                },
                 enabled = hasCooledDown
             )
         }
