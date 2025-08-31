@@ -14,7 +14,7 @@ android {
         applicationId = "com.example.sarpapp"
         minSdk = 23
         targetSdk = 34
-        versionCode = 2
+        versionCode = 3
         versionName = "1.0."+versionCode
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
